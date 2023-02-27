@@ -48,7 +48,7 @@ endif()
 	option(CARLSIM_LN_I_CALC_TYPES "Enables enhanced current calculation" ON)  # feature NM4R6 (experimental) )
 	option(CARLSIM_LN_GPU_STDP "Enables GPU accelerated functions for STDP" ON)  # feature GPU device functions (experimental) )
 
-	option(CARLSIM_JK_CA3_SNN "J. Koppsick extensions for Neuron-Type Specific CA3 SNN" ON) # feature ported on basis of CARLsim4 branch
+	option(CARLSIM_JK_CA3_SNN "J. Kopsick extensions for Neuron-Type Specific CA3 SNN" ON) # feature ported on basis of CARLsim4 branch
     option(CARLSIM_CSTP_DOUBLES "Use doubles instead of floats for computing CSTP conductance decay" ON)
 
 	set(CARLSIM_CUDA_GENCODE "-gencode arch=compute_86,code=sm_86" CACHE STRING "CUDA target architecture and device, e.g. _80 for Ampere/A100, _86 for Ampere/RTX3090" )  

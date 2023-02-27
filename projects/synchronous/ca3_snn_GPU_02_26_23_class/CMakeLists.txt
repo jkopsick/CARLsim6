@@ -1,44 +1,32 @@
-project(ca3_snn_GPU_sync_class)
-
-FIND_PACKAGE (Boost REQUIRED)
-
-INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
-
-# Headers
-    set(HDRS
-        generateSETUPStateSTP.h
-        generateCONFIGStateSTP.h 
-	)
+project(ca3_snn_GPU_02_26_23_class)
 
 # Targets  
-add_executable(ca3_snn_GPU_sync_class
-	${HDRS}
-    src/main_ca3_snn_GPU.cpp
-    )
+add_executable(ca3_snn_GPU_02_26_23_class
+    src/main_ca3_snn_GPU_02_26_23_class.cpp
+)
 
-source_group("Header Files" FILES ${HDRS})
 # definitions     
 if(CARLSIM_NO_CUDA)
-    target_compile_definitions(ca3_snn_GPU_sync_class PUBLIC
+    target_compile_definitions(ca3_snn_GPU_02_26_23_class PUBLIC
         -D__NO_CUDA__ )
 endif()
 
 # Linking    
-target_link_libraries(ca3_snn_GPU_sync_class PRIVATE
+target_link_libraries(ca3_snn_GPU_02_26_23_class PRIVATE
     carlsim
     carlsim-stopwatch
 )
-target_include_directories(ca3_snn_GPU_sync_class PRIVATE
+target_include_directories(ca3_snn_GPU_02_26_23_class PRIVATE
     ../../../tools/stopwatch
 )
    
         
 # Installation   
-install(TARGETS ca3_snn_GPU_sync_class
+install(TARGETS ca3_snn_GPU_02_26_23_class
     EXPORT carlsim
     RUNTIME 
         DESTINATION $<$<CONFIG:Debug>:debug/>samples 
-        COMPONENT ca3_snn_GPU_sync_class
+        COMPONENT ca3_snn_GPU_02_26_23_class
         )
 
-#install(FILES run_hello_world DESTINATION $<$<CONFIG:Debug>:debug/>samples)          
+#install(FILES ca3_snn_GPU_02_26_23_class DESTINATION $<$<CONFIG:Debug>:debug/>samples)          
