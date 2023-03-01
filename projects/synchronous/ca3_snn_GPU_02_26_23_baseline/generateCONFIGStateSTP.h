@@ -79,10 +79,10 @@ sim.connect(CA3_QuadD_LM, CA3_Basket, "random", RangeWeight(0.0f, 0.55f, 1.55f),
 sim.connect(CA3_QuadD_LM, CA3_BC_CCK, "random", RangeWeight(0.0f, 1.0f, 2.0f), 0.0495724663599669f,
                                           RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 1.308152788f, 0.0f);
                                        
-sim.connect(CA3_QuadD_LM, CA3_Pyramidal, "random", RangeWeight(0.0f, 0.65f, 2.45f), 0.11882477878628f,
+sim.connect(CA3_QuadD_LM, CA3_Pyramidal, "random", RangeWeight(0.0f, 0.65f, 1.65f), 0.11882477878628f,
                                           RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 1.183249644f, 0.0f);
                                        
-sim.connect(CA3_Axo_Axonic, CA3_Pyramidal, "random", RangeWeight(0.0f, 0.65f, 2.45f), 0.15f,
+sim.connect(CA3_Axo_Axonic, CA3_Pyramidal, "random", RangeWeight(0.0f, 0.65f, 1.65f), 0.15f,
                                           RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 1.869561088f, 0.0f);
                                        
 sim.connect(CA3_Basket, CA3_QuadD_LM, "random", RangeWeight(0.0f, 0.75f, 1.75f), 0.005f,
@@ -103,7 +103,7 @@ sim.connect(CA3_Basket, CA3_Bistratified, "random", RangeWeight(0.0f, 1.3f, 2.3f
 sim.connect(CA3_Basket, CA3_MFA_ORDEN, "random", RangeWeight(0.0f, 0.75f, 1.75f), 0.005f,
                                           RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 1.808726221f, 0.0f);
                                        
-sim.connect(CA3_Basket, CA3_Pyramidal, "random", RangeWeight(0.0f, 0.65f, 2.45f), 0.15f,
+sim.connect(CA3_Basket, CA3_Pyramidal, "random", RangeWeight(0.0f, 0.65f, 1.65f), 0.15f,
                                           RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 1.572405696f, 0.0f);
                                        
 sim.connect(CA3_BC_CCK, CA3_QuadD_LM, "random", RangeWeight(0.0f, 0.75f, 1.75f), 0.025f,
@@ -124,7 +124,7 @@ sim.connect(CA3_BC_CCK, CA3_Bistratified, "random", RangeWeight(0.0f, 1.3f, 2.3f
 sim.connect(CA3_BC_CCK, CA3_MFA_ORDEN, "random", RangeWeight(0.0f, 0.75f, 1.75f), 0.005f,
                                           RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 1.355214118f, 0.0f);
                                        
-sim.connect(CA3_BC_CCK, CA3_Pyramidal, "random", RangeWeight(0.0f, 0.65f, 2.45f), 0.15f,
+sim.connect(CA3_BC_CCK, CA3_Pyramidal, "random", RangeWeight(0.0f, 0.65f, 1.65f), 0.15f,
                                           RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 1.306303671f, 0.0f);
                                        
 sim.connect(CA3_Bistratified, CA3_QuadD_LM, "random", RangeWeight(0.0f, 0.75f, 1.75f), 0.00775423637622817f,
@@ -148,7 +148,7 @@ sim.connect(CA3_Bistratified, CA3_Ivy, "random", RangeWeight(0.0f, 0.65f, 1.65f)
 sim.connect(CA3_Bistratified, CA3_MFA_ORDEN, "random", RangeWeight(0.0f, 1.0f, 2.0f), 0.00862472688778918f,
                                           RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 1.567727407f, 0.0f);
                                        
-sim.connect(CA3_Bistratified, CA3_Pyramidal, "random", RangeWeight(0.0f, 0.65f, 2.45f), 0.0278686093547943f,
+sim.connect(CA3_Bistratified, CA3_Pyramidal, "random", RangeWeight(0.0f, 0.65f, 1.65f), 0.0278686093547943f,
                                           RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 1.431148109f, 0.0f);
                                        
 sim.connect(CA3_Ivy, CA3_QuadD_LM, "random", RangeWeight(0.0f, 0.75f, 1.75f), 0.00198176910683873f,
@@ -172,7 +172,7 @@ sim.connect(CA3_Ivy, CA3_Ivy, "random", RangeWeight(0.0f, 0.65f, 1.65f), 0.00375
 sim.connect(CA3_Ivy, CA3_MFA_ORDEN, "random", RangeWeight(0.0f, 0.75f, 1.75f), 0.0169285421706311f,
                                           RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 1.687214907f, 0.0f);
                                        
-sim.connect(CA3_Ivy, CA3_Pyramidal, "random", RangeWeight(0.0f, 0.65f, 2.45f), 0.0720967942651253f,
+sim.connect(CA3_Ivy, CA3_Pyramidal, "random", RangeWeight(0.0f, 0.65f, 1.65f), 0.0720967942651253f,
                                           RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 1.540661646f, 0.0f);
                                        
 sim.connect(CA3_MFA_ORDEN, CA3_QuadD_LM, "random", RangeWeight(0.0f, 0.75f, 1.75f), 0.00375566003798539f,
@@ -196,10 +196,10 @@ sim.connect(CA3_MFA_ORDEN, CA3_Ivy, "random", RangeWeight(0.0f, 0.65f, 1.65f), 0
 sim.connect(CA3_MFA_ORDEN, CA3_MFA_ORDEN, "random", RangeWeight(0.0f, 0.75f, 1.75f), 0.00210548528014741f,
                                           RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 1.552656079f, 0.0f);
                                        
-sim.connect(CA3_MFA_ORDEN, CA3_Pyramidal, "random", RangeWeight(0.0f, 0.65f, 2.45f), 0.0417555599977689f,
+sim.connect(CA3_MFA_ORDEN, CA3_Pyramidal, "random", RangeWeight(0.0f, 0.65f, 1.65f), 0.0417555599977689f,
                                           RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 1.360315289f, 0.0f);
                                        
-sim.connect(CA3_Pyramidal, CA3_QuadD_LM, "random", RangeWeight(0.0f, 1.0f, 2.25f), 0.0133672243607345f,
+sim.connect(CA3_Pyramidal, CA3_QuadD_LM, "random", RangeWeight(0.0f, 1.0f, 2.0f), 0.0133672243607345f,
                                       RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 0.874424964f, 0.0f);
                                    
 sim.connect(CA3_Pyramidal, CA3_Axo_Axonic, "random", RangeWeight(0.0f, 0.7f, 1.7f), 0.0148205394733136f,
@@ -217,10 +217,10 @@ sim.connect(CA3_Pyramidal, CA3_Bistratified, "random", RangeWeight(0.0f, 0.7f, 1
 sim.connect(CA3_Pyramidal, CA3_Ivy, "random", RangeWeight(0.0f, 1.35f, 2.35f), 0.0251567907913944f,
                                       RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 1.314331038f, 0.0f);
                                    
-sim.connect(CA3_Pyramidal, CA3_MFA_ORDEN, "random", RangeWeight(0.0f, 1.0f, 2.25f), 0.0209934225689348f,
+sim.connect(CA3_Pyramidal, CA3_MFA_ORDEN, "random", RangeWeight(0.0f, 1.0f, 2.0f), 0.0209934225689348f,
                                       RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 0.88025265f, 0.0f);
                                    
-sim.connect(CA3_Pyramidal, CA3_Pyramidal, "random", RangeWeight(0.0f, 1.2f, 1.55f), 0.0250664662231983f,
+sim.connect(CA3_Pyramidal, CA3_Pyramidal, "random", RangeWeight(0.0f, 1.2f, 2.2f), 0.0250664662231983f,
                                       RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 0.553062478f, 0.0f);
                                    
 sim.setSTP(CA3_QuadD_LM, CA3_Axo_Axonic, true, STPu(0.152487328f, 0.0f),
