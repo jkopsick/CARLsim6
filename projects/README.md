@@ -287,8 +287,40 @@ There are three directories from which SNNs can be simulated: [ca3_example_net_0
 ## Installation and Simulation of the SNNs
 
 ### Ubuntu Users
-For users compiling and running simulations with Ubuntu, the following steps will need to be taken:
-  
+For users compiling and running simulations with Ubuntu, the following steps will need to be taken (this guide assumes use of an A100 GPU with CUDA 11.2):
+
+1. Navigate to a directory of your choice (/home/username used in this guide) and create a new directory where the compiled CARLsim6 software will reside:
+
+ ```
+  cd ~
+  mkdir git_02_26_23 
+ ```
+
+2. Download the CARLsim6 source code for this branch:
+
+ ```
+  git clone https://github.com/jkopsick/CARLsim6.git -b feat/CS6_hc_ca3
+ ```
+
+3. Update gencode in the CARLsim6 main directory CMakeLists text file, by changing the following [line](https://github.com/jkopsick/CARLsim6/blob/feat/CS6_hc_ca3/CMakeLists.txt#L54) to the compute capability of your GPU:
+
+ ```
+  cd CARLsim6
+  nano CMakeLists.txt
+  set(CARLSIM_CUDA_GENCODE "-gencode arch=compute_80,code=sm_80" CACHE STRING "CUDA target architecture and device, e.g. _80 for Ampere/A100, _86 for Ampere/RTX3090" ) # A100 has a compute capability of 8.0
+ ```
+
+4. Download the latest UNIX/Linux binary for [cmake](https://cmake.org/download/) and place it in the directory created from step 1 (e.g., /home/username/git_02_26_23 in this guide).
+
+5. After downloading, we now install cmake (this guide assumes version 3.22.0) which is necessary for compiling CARLsim6:
+
+ ```
+  chmod +x ./cmake-3.22.0-linux-x86_64.sh
+  ./cmake-3.22.0-linux-x86_64.sh --prefix=/home/username/cmake-3.22
+ ```
+
+6. After installation, move bin, doc, man, and share folders to /home/username/cmake-3.22 from their subfolder, and delete the original subfolder. This allows for /home/username/cmake-3.22/bin/cmake to be the correct path.
+
 1. Update the bashrc from your home directory (/home/username) with the following settings, which will load all modules necessary to compile and install CARLsim, along with compiling and running the simulations:
 
   ```
