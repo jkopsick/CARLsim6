@@ -252,29 +252,30 @@ After each simulation is executed, the output of the network to the terminal can
 | Stopwatch                                                                    |
 |------------------------------------------------------------------------------|
 |                  Tag         Start          Stop           Lap         Total |
-|                start  00:00:00.000  00:00:00.057  00:00:00.057  00:00:00.057 |
-|         setupNetwork  00:00:00.057  00:13:42.719  00:13:42.662  00:13:42.719 |
-|           runNetwork  00:13:42.719  01:35:09.850  01:21:27.131  01:35:09.850 |
+|                start  00:00:00.000  00:00:00.193  00:00:00.193  00:00:00.193 |
+|         setupNetwork  00:00:00.193  01:10:13.096  01:10:12.903  01:10:13.096 |
+|           runNetwork  01:10:13.096  01:40:38.188  00:30:25.092  01:40:38.188 |
 --------------------------------------------------------------------------------
 
 
 ********************    Simulation Summary      ***************************
 Network Parameters: 	numNeurons = 89226 (numNExcReg:numNInhReg = 83.3:16.7)
 			numSynapses = 250078223
-			maxDelay = 2
+			maxDelay = 1
 Simulation Mode:	COBA
 Random Seed:		10
 Timing:			Model Simulation Time = 9 sec
-			Actual Execution Time = 4887.13 sec
-Average Firing Rate:	2+ms delay = 1.975 Hz
-			1ms delay = 5.155 Hz
-			Overall = 2.505 Hz
+			Actual Execution Time = 1825.09 sec
+			Speed Factor (Model/Real) = 0.5 % 
+Average Firing Rate:	2+ms delay = 0.000 Hz
+			1ms delay = 0.775 Hz
+			Overall = 0.775 Hz
 Overall Spike Count Transferred:
 			2+ms delay = 0
 			1ms delay = 0
-Overall Spike Count:	2+ms delay = 1321930
-			1ms delay = 689466
-			Total = 2011396
+Overall Spike Count:	2+ms delay = 0
+			1ms delay = 622231
+			Total = 622231
 *********************************************************************************
 ```
 
