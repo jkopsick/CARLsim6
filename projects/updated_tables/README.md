@@ -14,3 +14,4 @@
 |CA3 Ivy|Ivy/Neurogliaform Family:Ivy/Neurogliaform:CA3||2,334|
 |CA3 MFA ORDEN|Mossy Fiber-related:L-targeting:CA3||1,526|
 |CA3 QuadD-LM|O-LM Family:O-LM-Like:CA3||3,280|
+
