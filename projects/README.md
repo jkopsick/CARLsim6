@@ -321,6 +321,35 @@ For users compiling and running simulations with Ubuntu, the following steps wil
 
 6. After installation, move bin, doc, man, and share folders to /home/username/cmake-3.22 from their subfolder, and delete the original subfolder. This allows for /home/username/cmake-3.22/bin/cmake to be the correct path.
 
+7. Download the [google test suite](https://github.com/google/googletest/releases/tag/release-1.10.0) (this guide assumes version 1.10.0) and place it in the directory created from step 1 (e.g., /home/username/git_02_26_23 in this guide).
+
+8. After downloading, we now install the google test suite:
+
+ ```
+  unzip googletest-release-1.10.0.zip
+  cd googletest-release-1.10.0l
+  mkdir build
+  cd build
+  /home/username/cmake-3.22/bin/cmake \
+  -DCMAKE_INSTALL_PREFIX=/home/<user>/gtest-1.10 \
+  /home/username/git/googletest-release-1.10.0
+  make -j32
+  make install -j32
+ ```
+
+9. After installation of the google test suite, update the bashrc from your home directory (/home/username) with the following settings:
+
+  ```
+  nano ~/.bashrc
+  ```
+
+  ```
+  # Google test suite related path variables
+  export GTEST_LIBRARY=/home/<user>/gtest_1.10/lib/libgtest.a
+  export GTEST_MAIN_LIBRARY=/home/<user>/gtest_1.10/lib/libgtest_main.a
+  export GTEST_ROOT=/home/<user>/gtest_1.10/
+  ```
+
 1. Update the bashrc from your home directory (/home/username) with the following settings, which will load all modules necessary to compile and install CARLsim, along with compiling and running the simulations:
 
   ```
