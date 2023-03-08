@@ -345,9 +345,9 @@ For users compiling and running simulations with Ubuntu, the following steps wil
 
   ```
   # Google test suite related path variables
-  export GTEST_LIBRARY=/home/<user>/gtest_1.10/lib/libgtest.a
-  export GTEST_MAIN_LIBRARY=/home/<user>/gtest_1.10/lib/libgtest_main.a
-  export GTEST_ROOT=/home/<user>/gtest_1.10/
+  export GTEST_LIBRARY=/home/username/gtest_1.10/lib/libgtest.a
+  export GTEST_MAIN_LIBRARY=/home/username/gtest_1.10/lib/libgtest_main.a
+  export GTEST_ROOT=/home/username/gtest_1.10/
   ```
 
 1. Update the bashrc from your home directory (/home/username) with the following settings, which will load all modules necessary to compile and install CARLsim, along with compiling and running the simulations:
