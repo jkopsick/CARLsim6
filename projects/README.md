@@ -36,15 +36,15 @@ Beyond the dependencies of CARLsim6 described at the link above, the following d
 |boost|1.73.0|
 |gcc|9.3.0|
 |nohup|8.30|
-|CUDA||11.2.0|
+|CUDA|11.2.0|
 
 ### GMU Hopper Cluster
 |module|tested version(s)|
 |---|---|
 |boost|1.73.0|
 |gcc|9.3.0|
-|openmpi||4.0.4|
-|CUDA||11.2.0|
+|openmpi|4.0.4|
+|CUDA|11.2.0|
 
 ## Creation of a network simulation
 The creation of a cell-type and connection-type specific network and the subsequent simulation of it in CARLsim6 relies on the following critical components, which will each be described in their own section:
