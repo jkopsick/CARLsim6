@@ -556,9 +556,9 @@ For users with a Hopper account at GMU, the following steps will need to be take
 ## A framework to test hypotheses of the hippocampal formation
 The examples shown above describe how a network model of CA3 consisting of eight neuron types and fifty-one connection types can be utilized to test the network's stability and robustness to a transient, synchronous or asynchronous stimulation protocol. What if we wanted to test different hypotheses regarding CA3, or other subregions of the hippocampal formation? Hippocampal network models created in CARLsim are flexible enough to test additional hypotheses, which we provide an example of below.
 
-Suppose we wanted to understand how different representative cell types in area CA3 were involved in pattern storage and completion. One way we could approach this is by using the cell types involved in the [archetype network](https://github.com/UCI-CARL/CARLsim4/tree/feat/meansdSTPPost_hc/projects/synchronous/ca3_snn_GPU_02_16_20_HC_IM_archetype) with a population of dentate gyrus granule cells as external input to the network. The following code will walk through how to create and simulate such a network and the scenario of pattern storage and completion. A directory containing the code to run this example can be found [here](https://github.com/UCI-CARL/CARLsim4/tree/feat/meansdSTPPost_hc/projects/ca3_snn_GPU_06_25_21_ca3_snn_pattern_completion).
+Suppose we wanted to understand how different representative cell types in area CA3 were involved in pattern storage and completion. One way we could approach this is by using the cell types involved in the [archetype network](https://github.com/jkopsick/CARLsim6/tree/feat/CS6_hc_ca3/projects/synchronous/ca3_snn_GPU_02_26_23_archetype), with noisy external input applied to these cell types reflecting the synaptic input they may receive from the mossy fibers of the dentate gyrus granule cells. The following code will walk through how to create and simulate such a network and the scenario of pattern storage and completion. A directory containing the code to run this example can be found [here](https://github.com/jkopsick/CARLsim6/tree/feat/CS6_hc_ca3/projects/ca3_snn_GPU_02_26_23_pattern_completion).
 
-1. Declare groups for each representative neuron type, along with Izhikevich parameter sets, how they connect to other representative neuron types, and their short-term plasticity rules. Additionally we set the max synaptic weight to 5 nS for each connection type (more details can be found [here](https://github.com/UCI-CARL/CARLsim4/blob/feat/meansdSTPPost_hc/projects/ca3_snn_GPU_06_25_21_ca3_snn_pattern_completion/generateCONFIGStateSTP.h)):
+1. Declare groups for each representative neuron type, along with Izhikevich parameter sets, how they connect to other representative neuron types, and their short-term plasticity rules. Additionally we set the max synaptic weight to 5 nS for each connection type (more details can be found [here](https://github.com/jkopsick/CARLsim6/tree/feat/CS6_hc_ca3/projects/ca3_snn_GPU_02_26_23_pattern_completion/generateCONFIGStateSTP.h)):
 
 ```
 int CA3_Basket = sim.createGroup("CA3_Basket", 3089,
@@ -572,10 +572,6 @@ int CA3_MFA_ORDEN = sim.createGroup("CA3_MFA_ORDEN", 11771,
 int CA3_Pyramidal = sim.createGroup("CA3_Pyramidal", 74366,
                               EXCITATORY_NEURON, 0, GPU_CORES
 			      	   );
-
-int DG_Granule = sim.createSpikeGeneratorGroup("DG_Granule", 394502,
-                              EXCITATORY_NEURON, 0, GPU_CORES
-			      		      );
                               
 sim.setNeuronParameters(CA3_Basket, 45.0, 0.0, 0.9951729, 0.0,
                                                 -57.506126, 0.0, -23.378766, 0.0, 0.003846186,
@@ -598,55 +594,34 @@ sim.setNeuronParameters(CA3_Pyramidal, 366.0, 0.0, 0.792338703789581, 0.0,
                                                 588.0, 0.0, 1
 		       );
                      
-sim.connect(CA3_Basket, CA3_Basket, "random", RangeWeight(0.0f, 0.55f, 5.0f), 0.005f,
-                                          RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 3.281611994f, 0.0f
-	   );
+sim.connect(CA3_Basket, CA3_Basket, "random", RangeWeight(0.0f, 1.0f, 5.0f), 0.00663136909224044f,
+                                          RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 2.139606233f, 0.0f);
                                        
-sim.connect(CA3_Basket, CA3_MFA_ORDEN, "random", RangeWeight(0.0f, 0.75f, 5.0f), 0.005f,
-                                          RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 1.808726221f, 0.0f
-	   );
+sim.connect(CA3_Basket, CA3_MFA_ORDEN, "random", RangeWeight(0.0f, 1.0f, 5.0f), 0.00573675602167279f,
+                                          RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 1.681117626f, 0.0f);
                                        
-sim.connect(CA3_Basket, CA3_Pyramidal, "random", RangeWeight(0.0f, 1.45f, 5.0f), 0.15f,
-                                          RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 1.572405696f, 0.0f
-	   );
+sim.connect(CA3_Basket, CA3_Pyramidal, "random", RangeWeight(0.0f, 1.0f, 5.0f), 0.15f,
+                                          RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 1.104194742f, 0.0f);
                                        
-sim.connect(CA3_MFA_ORDEN, CA3_Basket, "random", RangeWeight(0.0f, 0.55f, 5.0f), 0.0072882240621001f,
-                                          RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 1.972333716f, 0.0f
-	   );
+sim.connect(CA3_MFA_ORDEN, CA3_Basket, "random", RangeWeight(0.0f, 1.0f, 5.0f), 0.0117345087001957f,
+                                          RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 1.450174133f, 0.0f);
                                        
-sim.connect(CA3_MFA_ORDEN, CA3_MFA_ORDEN, "random", RangeWeight(0.0f, 0.75f, 5.0f), 0.00210548528014741f,
-                                          RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 1.552656079f, 0.0f
-	   );
+sim.connect(CA3_MFA_ORDEN, CA3_MFA_ORDEN, "random", RangeWeight(0.0f, 1.0f, 5.0f), 0.00913901938344389f,
+                                          RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 1.828413006f, 0.0f);
                                        
-sim.connect(CA3_MFA_ORDEN, CA3_Pyramidal, "random", RangeWeight(0.0f, 1.45f, 5.0f), 0.0417555599977689f,
-                                          RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 1.360315289f, 0.0f
-	   );
-                                       
-sim.connect(CA3_Pyramidal, CA3_Basket, "random", RangeWeight(0.0f, 1.45f, 5.0f), 0.0197417562762975f,
-                                      RangeDelay(1,2), RadiusRF(-1.0), SYN_PLASTIC, 1.172460639f, 0.0f
-	   );
+sim.connect(CA3_MFA_ORDEN, CA3_Pyramidal, "random", RangeWeight(0.0f, 1.0f, 5.0f), 0.0637836805073049f,
+                                          RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 0.858647029f, 0.0f);
                                    
-sim.connect(CA3_Pyramidal, CA3_MFA_ORDEN, "random", RangeWeight(0.0f, 1.25f, 5.0f), 0.0209934225689348f,
-                                      RangeDelay(1,2), RadiusRF(-1.0), SYN_PLASTIC, 0.88025265f, 0.0f
-	   );
+sim.connect(CA3_Pyramidal, CA3_Basket, "random", RangeWeight(0.0f, 1.0f, 5.0f), 0.0161746579069214f,
+                                      RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 0.910763922f, 0.0f);
+                                  
+sim.connect(CA3_Pyramidal, CA3_MFA_ORDEN, "random", RangeWeight(0.0f, 1.0f, 5.0f), 0.0176731417548347f,
+                                      RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 1.039009039f, 0.0f);
                                    
-sim.connect(CA3_Pyramidal, CA3_Pyramidal, "random", RangeWeight(0.0f, 0.55f, 5.0f), 0.0250664662231983f,
-                                      RangeDelay(1,2), RadiusRF(-1.0), SYN_PLASTIC, 0.553062478f, 0.0f
-	   );
-
-sim.connect(DG_Granule, CA3_Basket, "random", RangeWeight(0.0f, 0.65f, 2.0f), 0.001f,
-                                          RangeDelay(1,10), RadiusRF(-1.0), SYN_PLASTIC, 1.4977493f, 0.0f
-	   );
-                                       
-sim.connect(DG_Granule, CA3_MFA_ORDEN, "random", RangeWeight(0.0f, 0.75f, 2.0f), 0.001f,
-                                          RangeDelay(1,10), RadiusRF(-1.0), SYN_PLASTIC, 1.35876774f, 0.0f
-	   );
-                                       
-sim.connect(DG_Granule, CA3_Pyramidal, "random", RangeWeight(0.0f, 1.45f, 2.0f), 0.002f,
-                                          RangeDelay(1,10), RadiusRF(-1.0), SYN_PLASTIC, 1.262911855f, 0.0f
-	   );
-                                   
-sim.setSTP(CA3_Basket, CA3_Basket, true, STPu(0.38950627465000004f, 0.0f),
+sim.connect(CA3_Pyramidal, CA3_Pyramidal, "random", RangeWeight(0.0f, 1.0f, 5.0f), 0.0250664662231983f,
+                                      RangeDelay(1), RadiusRF(-1.0), SYN_PLASTIC, 0.663674974f, 0.0f);
+                                     
+sim.setSTP(CA3_Basket, CA3_Basket, true, STPu(0.162517426384018f, 0.0f),
                                          STPtauU(11.19042564f, 0.0f),
                                          STPtauX(689.5059466f, 0.0f),
                                          STPtdAMPA(5.0f, 0.0f),
@@ -654,10 +629,9 @@ sim.setSTP(CA3_Basket, CA3_Basket, true, STPu(0.38950627465000004f, 0.0f),
                                          STPtdGABAa(3.007016545f, 0.0f),
                                          STPtdGABAb(150.0f, 0.0f),
                                          STPtrNMDA(0.0f, 0.0f),
-                                         STPtrGABAb(0.0f, 0.0f)
-	  );
+                                         STPtrGABAb(0.0f, 0.0f));
                                      
-sim.setSTP(CA3_Basket, CA3_MFA_ORDEN, true, STPu(0.301856475f, 0.0f),
+sim.setSTP(CA3_Basket, CA3_MFA_ORDEN, true, STPu(0.177068034944573f, 0.0f),
                                          STPtauU(19.60369075f, 0.0f),
                                          STPtauX(581.9355018f, 0.0f),
                                          STPtdAMPA(5.0f, 0.0f),
@@ -665,10 +639,9 @@ sim.setSTP(CA3_Basket, CA3_MFA_ORDEN, true, STPu(0.301856475f, 0.0f),
                                          STPtdGABAa(5.230610278f, 0.0f),
                                          STPtdGABAb(150.0f, 0.0f),
                                          STPtrNMDA(0.0f, 0.0f),
-                                         STPtrGABAb(0.0f, 0.0f)
-	  );
+                                         STPtrGABAb(0.0f, 0.0f));
                                      
-sim.setSTP(CA3_Basket, CA3_Pyramidal, true, STPu(0.12521945645000002f, 0.0f),
+sim.setSTP(CA3_Basket, CA3_Pyramidal, true, STPu(0.118642073007157f, 0.0f),
                                          STPtauU(16.73589406f, 0.0f),
                                          STPtauX(384.3363321f, 0.0f),
                                          STPtdAMPA(5.0f, 0.0f),
@@ -676,10 +649,9 @@ sim.setSTP(CA3_Basket, CA3_Pyramidal, true, STPu(0.12521945645000002f, 0.0f),
                                          STPtdGABAa(7.63862234f, 0.0f),
                                          STPtdGABAb(150.0f, 0.0f),
                                          STPtrNMDA(0.0f, 0.0f),
-                                         STPtrGABAb(0.0f, 0.0f)
-	  );
+                                         STPtrGABAb(0.0f, 0.0f));
                                      
-sim.setSTP(CA3_MFA_ORDEN, CA3_Basket, true, STPu(0.36184299919999996f, 0.0f),
+sim.setSTP(CA3_MFA_ORDEN, CA3_Basket, true, STPu(0.24814064689538f, 0.0f),
                                          STPtauU(15.70448009f, 0.0f),
                                          STPtauX(759.1190877f, 0.0f),
                                          STPtdAMPA(5.0f, 0.0f),
@@ -687,10 +659,9 @@ sim.setSTP(CA3_MFA_ORDEN, CA3_Basket, true, STPu(0.36184299919999996f, 0.0f),
                                          STPtdGABAa(3.896195604f, 0.0f),
                                          STPtdGABAb(150.0f, 0.0f),
                                          STPtrNMDA(0.0f, 0.0f),
-                                         STPtrGABAb(0.0f, 0.0f)
-	  );
+                                         STPtrGABAb(0.0f, 0.0f));
                                      
-sim.setSTP(CA3_MFA_ORDEN, CA3_MFA_ORDEN, true, STPu(0.2855712375f, 0.0f),
+sim.setSTP(CA3_MFA_ORDEN, CA3_MFA_ORDEN, true, STPu(0.206752592891043f, 0.0f),
                                          STPtauU(22.52027885f, 0.0f),
                                          STPtauX(642.0975453f, 0.0f),
                                          STPtdAMPA(5.0f, 0.0f),
@@ -698,10 +669,9 @@ sim.setSTP(CA3_MFA_ORDEN, CA3_MFA_ORDEN, true, STPu(0.2855712375f, 0.0f),
                                          STPtdGABAa(5.533747322f, 0.0f),
                                          STPtdGABAb(150.0f, 0.0f),
                                          STPtrNMDA(0.0f, 0.0f),
-                                         STPtrGABAb(0.0f, 0.0f)
-	  );
+                                         STPtrGABAb(0.0f, 0.0f));
                                      
-sim.setSTP(CA3_MFA_ORDEN, CA3_Pyramidal, true, STPu(0.11893441670000002f, 0.0f),
+sim.setSTP(CA3_MFA_ORDEN, CA3_Pyramidal, true, STPu(0.112589304970516f, 0.0f),
                                          STPtauU(20.61711347f, 0.0f),
                                          STPtauX(496.0484093f, 0.0f),
                                          STPtdAMPA(5.0f, 0.0f),
@@ -709,10 +679,9 @@ sim.setSTP(CA3_MFA_ORDEN, CA3_Pyramidal, true, STPu(0.11893441670000002f, 0.0f),
                                          STPtdGABAa(7.149050278f, 0.0f),
                                          STPtdGABAb(150.0f, 0.0f),
                                          STPtrNMDA(0.0f, 0.0f),
-                                         STPtrGABAb(0.0f, 0.0f)
-	  );
-                                     
-sim.setSTP(CA3_Pyramidal, CA3_Basket, true, STPu(0.12174287290000001f, 0.0f),
+                                         STPtrGABAb(0.0f, 0.0f));
+                                 
+sim.setSTP(CA3_Pyramidal, CA3_Basket, true, STPu(0.217145987458849f, 0.0f),
                                      STPtauU(21.16086172f, 0.0f),
                                      STPtauX(691.4177768f, 0.0f),
                                      STPtdAMPA(3.97130389f, 0.0f),
@@ -720,10 +689,9 @@ sim.setSTP(CA3_Pyramidal, CA3_Basket, true, STPu(0.12174287290000001f, 0.0f),
                                      STPtdGABAa(6.0f, 0.0f),
                                      STPtdGABAb(150.0f, 0.0f),
                                      STPtrNMDA(0.0f, 0.0f),
-                                     STPtrGABAb(0.0f, 0.0f)
-	  );
-                                 
-sim.setSTP(CA3_Pyramidal, CA3_MFA_ORDEN, true, STPu(0.14716404225000002f, 0.0f),
+                                     STPtrGABAb(0.0f, 0.0f));
+
+sim.setSTP(CA3_Pyramidal, CA3_MFA_ORDEN, true, STPu(0.182858254313729f, 0.0f),
                                      STPtauU(29.01335489f, 0.0f),
                                      STPtauX(444.9925289f, 0.0f),
                                      STPtdAMPA(5.948303553f, 0.0f),
@@ -731,10 +699,9 @@ sim.setSTP(CA3_Pyramidal, CA3_MFA_ORDEN, true, STPu(0.14716404225000002f, 0.0f),
                                      STPtdGABAa(6.0f, 0.0f),
                                      STPtdGABAb(150.0f, 0.0f),
                                      STPtrNMDA(0.0f, 0.0f),
-                                     STPtrGABAb(0.0f, 0.0f)
-	  );
-                                 
-sim.setSTP(CA3_Pyramidal, CA3_Pyramidal, true, STPu(0.27922089865f, 0.0f),
+                                     STPtrGABAb(0.0f, 0.0f));
+
+sim.setSTP(CA3_Pyramidal, CA3_Pyramidal, true, STPu(0.279220899f, 0.0f),
                                      STPtauU(21.44820657f, 0.0f),
                                      STPtauX(318.510891f, 0.0f),
                                      STPtdAMPA(10.21893984f, 0.0f),
@@ -742,60 +709,16 @@ sim.setSTP(CA3_Pyramidal, CA3_Pyramidal, true, STPu(0.27922089865f, 0.0f),
                                      STPtdGABAa(6.0f, 0.0f),
                                      STPtdGABAb(150.0f, 0.0f),
                                      STPtrNMDA(0.0f, 0.0f),
-                                     STPtrGABAb(0.0f, 0.0f)
-	  );
-
-sim.setSTP(DG_Granule, CA3_Basket, true, STPu(0.187709502f, 0.0f),
-                                         STPtauU(30.28628071f, 0.0f),
-                                         STPtauX(744.6556525f, 0.0f),
-                                         STPtdAMPA(3.582783578f, 0.0f),
-                                         STPtdNMDA(150.0f, 0.0f),
-                                         STPtdGABAa(5.0f, 0.0f),
-                                         STPtdGABAb(150.0f, 0.0f),
-                                         STPtrNMDA(0.0f, 0.0f),
-                                         STPtrGABAb(0.0f, 0.0f)
-	  );
-					 
-sim.setSTP(DG_Granule, CA3_MFA_ORDEN, true, STPu(0.194481964f, 0.0f),
-                                         STPtauU(48.64778619f, 0.0f),
-                                         STPtauX(453.6458777f, 0.0f),
-                                         STPtdAMPA(4.86667462f, 0.0f),
-                                         STPtdNMDA(150.0f, 0.0f),
-                                         STPtdGABAa(5.0f, 0.0f),
-                                         STPtdGABAb(150.0f, 0.0f),
-                                         STPtrNMDA(0.0f, 0.0f),
-                                         STPtrGABAb(0.0f, 0.0f)
-	  );
-                                     
-sim.setSTP(DG_Granule, CA3_Pyramidal, true, STPu(0.156887286f, 0.0f),
-                                         STPtauU(42.00785645f, 0.0f),
-                                         STPtauX(347.4434166f, 0.0f),
-                                         STPtdAMPA(7.425713188f, 0.0f),
-                                         STPtdNMDA(150.0f, 0.0f),
-                                         STPtdGABAa(5.0f, 0.0f),
-                                         STPtdGABAb(150.0f, 0.0f),
-                                         STPtrNMDA(0.0f, 0.0f),
-                                         STPtrGABAb(0.0f, 0.0f)
-	  );
+                                     STPtrGABAb(0.0f, 0.0f));
 ```
 
-2. We set excitatory and inhibitory spike-time dependent plasticity for each neuron type, using default parameters (more details can be found near the bottom of the page [here](https://github.com/UCI-CARL/CARLsim4/blob/feat/meansdSTPPost_hc/projects/ca3_snn_GPU_06_25_21_ca3_snn_pattern_completion/generateCONFIGStateSTP.h)):
+2. We set excitatory spike-time dependent plasticity for the connection between the Pyramidal cells, using default parameters (more details can be found near the bottom of the page [here](https://github.com/jkopsick/CARLsim6/tree/feat/CS6_hc_ca3/projects/ca3_snn_GPU_02_26_23_pattern_completion/generateCONFIGStateSTP.h)):
 
 ```
-sim.setESTDP(CA3_Basket, true, STANDARD, ExpCurve(0.1f, 20.0f, -0.1f, 20.0f));
-
-sim.setISTDP(CA3_Basket, true, STANDARD, ExpCurve(-0.1f, 20.0f, 0.1f, 20.0f));
-
-sim.setESTDP(CA3_MFA_ORDEN, true, STANDARD, ExpCurve(0.1f, 20.0f, -0.1f, 20.0f));
-
-sim.setISTDP(CA3_MFA_ORDEN, true, STANDARD, ExpCurve(-0.1f, 20.0f, 0.1f, 20.0f));
-
-sim.setESTDP(CA3_Pyramidal, true, STANDARD, ExpCurve(0.1f, 20.0f, -0.1f, 20.0f));
-
-sim.setISTDP(CA3_Pyramidal, true, STANDARD, ExpCurve(-0.1f, 20.0f, 0.1f, 20.0f));
+sim.setESTDP(CA3_Pyramidal, CA3_Pyramidal_ true, STANDARD, ExpCurve(0.1f, 20.0f, -0.1f, 20.0f));
 ```
 
-3. Create SpikeMonitors and NeuronMonitors for each neuron type (more details can be found at the bottom of the page [here](https://github.com/UCI-CARL/CARLsim4/blob/feat/meansdSTPPost_hc/projects/ca3_snn_GPU_06_25_21_ca3_snn_pattern_completion/generateCONFIGStateSTP.h) and at the top of the page [here](https://github.com/UCI-CARL/CARLsim4/blob/feat/meansdSTPPost_hc/projects/ca3_snn_GPU_06_25_21_ca3_snn_pattern_completion/generateSETUPStateSTP.h)):
+3. Create SpikeMonitors and NeuronMonitors for each neuron type (more details can be found at the bottom of the page [here](https://github.com/jkopsick/CARLsim6/tree/feat/CS6_hc_ca3/projects/ca3_snn_GPU_02_26_23_pattern_completion/generateCONFIGStateSTP.h) and at the top of the page [here](https://github.com/jkopsick/CARLsim6/tree/feat/CS6_hc_ca3/projects/ca3_snn_GPU_02_26_23_pattern_completion/generateSETUPStateSTP.h)):
 
 ```
 sim.setNeuronMonitor(CA3_Basket, "DEFAULT");
@@ -804,6 +727,9 @@ sim.setNeuronMonitor(CA3_MFA_ORDEN, "DEFAULT");
                                  
 sim.setNeuronMonitor(CA3_Pyramidal, "DEFAULT");
 
+```
+
+```
 sim.setSpikeMonitor(CA3_Basket, "DEFAULT");
 
 sim.setSpikeMonitor(CA3_MFA_ORDEN, "DEFAULT");
@@ -811,108 +737,143 @@ sim.setSpikeMonitor(CA3_MFA_ORDEN, "DEFAULT");
 sim.setSpikeMonitor(CA3_Pyramidal, "DEFAULT");
 ```
 
-4. Create a [PoissonRate object](http://uci-carl.github.io/CARLsim4/ch6_input.html#ch6s1s1_poisson_rate) for the Granule cell population and set the mean firing rate of all neurons to 0.4 Hz. This provides a constant source of random input to the network exhibited during baseline network activity (other forms of network stimulation are described [here](http://uci-carl.github.io/CARLsim4/ch6_input.html); more details can also be found [here](https://github.com/UCI-CARL/CARLsim4/blob/feat/meansdSTPPost_hc/projects/ca3_snn_GPU_06_25_21_ca3_snn_pattern_completion/generateSETUPStateSTP.h)):
-
-```
-int DG_Granule_frate = 100.0f;
-
-PoissonRate DG_Granule_rate(394502, true); // create PoissonRate object for all Granule cells
-DG_Granule_rate.setRates(0.4f); // set all mean firing rates for the object to 0.4 Hz
-sim.setSpikeRate(DG_Granule, &DG_Granule_rate, 1); // link the object with defined Granule cell group, with refractory period 1 ms
-```
-
-5. In the main simulation script file, we now declare variables and vectors that will be used to select a subset of the granule cell population to increase their firing rates. Ten granule cells are chosen from the assigned set of {0,5,10,...,45} (more details can be found near the middle of the page [here](https://github.com/UCI-CARL/CARLsim4/blob/feat/meansdSTPPost_hc/projects/ca3_snn_GPU_06_25_21_ca3_snn_pattern_completion/src/main_ca3_snn_GPU.cpp)):
+4. In the main simulation script file, we now declare variables and vectors that will be used to apply noisy current to all cell types, and choose 20 Pyramidal cells from the assigned set of {0,5,10,...,95} to reflect a pattern to be stored, pattern A (more details can be found near the middle of the page [here](https://github.com/jkopsick/CARLsim6/tree/feat/CS6_hc_ca3/projects/ca3_snn_GPU_02_26_23_pattern_completion/src/main_ca3_snn_GPU.cpp)):
 
 ```
 // Declare variables that will store the start and end ID for the neurons
-// in the granule group
-int DG_start = sim.getGroupStartNeuronId(DG_Granule);
-int DG_end = sim.getGroupEndNeuronId(DG_Granule);
-int DG_range = (DG_end - DG_start) + 1;
+// in the Pyramidal, MFA-ORDEN, and Basket groups
+int pyr_start = sim.getGroupStartNeuronId(CA3_Pyramidal);
+int pyr_end = sim.getGroupEndNeuronId(CA3_Pyramidal);
+int pyr_range = (pyr_end - pyr_start) + 1;
 
-// Create a vector that is the length of the number of neurons in the granule population
-std::vector<int> DG_vec( boost::counting_iterator<int>( 0 ),
-                         boost::counting_iterator<int>( DG_range ));
-			 
-// Define the number of granule cells to fire
-int numGranuleFire = 10;
+int mfao_start = sim.getGroupStartNeuronId(CA3_MFA_ORDEN);
+int mfao_end = sim.getGroupEndNeuronId(CA3_MFA_ORDEN);
+int mfao_range = (mfao_end - mfao_start) + 1;
 
-std::vector<int> DG_vec_A;
+int bc_start = sim.getGroupStartNeuronId(CA3_Basket);
+int bc_end = sim.getGroupEndNeuronId(CA3_Basket);
+int bc_range = (bc_end - bc_start) + 1;
 
-// Define the location of those granule cells so that we choose the same granule cells each time we call setRates
-for (int i = 0; i < numGranuleFire; i++)
+// Create a vector that is the length of the number of neurons for each group to define the noisy current
+std::vector<int> pyr_vec( boost::counting_iterator<int>( 0 ),
+                          boost::counting_iterator<int>( pyr_range ));
+std::vector<float> pc_background_current(pyr_range, 0.0f);
+std::vector<float> pc_current = pc_background_current;
+
+std::vector<int> mfao_vec( boost::counting_iterator<int>( 0 ),
+                          boost::counting_iterator<int>( mfao_range ));
+std::vector<float> mfao_background_current(mfao_range, 0.0f);
+std::vector<float> mfao_current = mfao_background_current;
+
+std::vector<int> bc_vec( boost::counting_iterator<int>( 0 ),
+                          boost::counting_iterator<int>( bc_range ));
+std::vector<float> bc_background_current(bc_range, 0.0f);
+std::vector<float> bc_current = bc_background_current;
+
+// Define the number of Pyramidal cells to fire
+int numPyramidalFire = 20;
+
+std::vector<int> PC_vec_A;
+
+// Define the location of those Pyramidal cells so that we choose the same Pyramidal cells each time we evoke pattern A
+for (int i = 0; i < numPyramidalFire; i++)
 {
-    DG_vec_A.push_back(5*(i+1));
+    PC_vec_A.push_back(5*(i+1));
 }
 ```
-6. Before the first simulation begins, the newly created network structure be saved by calling the saveSimulation function (more details can be found near the middle of the page [here](https://github.com/UCI-CARL/CARLsim4/blob/feat/meansdSTPPost_hc/projects/ca3_snn_GPU_06_25_21_ca3_snn_pattern_completion/src/main_ca3_snn_GPU.cpp)):
+5. Before the first simulation begins, the newly created network structure can be saved by calling the saveSimulation function (more details can be found near the middle of the page [here](https://github.com/jkopsick/CARLsim6/tree/feat/CS6_hc_ca3/projects/ca3_snn_GPU_02_26_23_pattern_completion/src/main_ca3_snn_GPU.cpp)):
 
 ```
  sim.saveSimulation("ca3SNN1.dat", true); // define where to save the network structure to and save synapse info
 ```
 
-7. A simulation protocol is now defined which runs the simulation for 10 seconds, where halfway through the simulation the ten granule cells selected have their firing rates elevated to the defined firing rate of 100 Hz within two 25 ms time windows (corresponding to gamma cycles; more details can be found near the bottom of the page [here](https://github.com/UCI-CARL/CARLsim4/blob/feat/meansdSTPPost_hc/projects/ca3_snn_GPU_06_25_21_ca3_snn_pattern_completion/src/main_ca3_snn_GPU.cpp)):
+6. A simulation protocol is now defined which runs the simulation for 10 seconds, where halfway through the simulation the twenty Pyramidal cells selected receive elevated input, which will define pattern A, within two 25 ms time windows (corresponding to gamma cycles; more details can be found near the bottom of the page [here](https://github.com/jkopsick/CARLsim6/tree/feat/CS6_hc_ca3/projects/ca3_snn_GPU_02_26_23_pattern_completion/src/main_ca3_snn_GPU.cpp)):
 
 ```
 // run for a total of 10 seconds
 // at the end of each runNetwork call, SpikeMonitor stats will be printed
-for (int i=0; i<20; i++)
+for (int i=0; i<10000; i++)
 {
-	if (i >= 0 && i < 10) 
+
+  float pc_Iapp = 50.0f;
+  float pc_Iapp_sd = 175.0f;
+  
+  for (int i = 0; i < pyr_range; i++)
+  {
+      pc_background_current.at(i) = pc_Iapp + pc_Iapp_sd * (float)drand48();
+  }   
+
+  float mfao_Iapp = 10.0f;
+  float mfao_Iapp_sd = 50.0f;
+  for (int i = 0; i < mfao_range; i++)
+  {
+      mfao_background_current.at(i) = mfao_Iapp + mfao_Iapp_sd * (float)drand48();
+  }
+
+  float bc_Iapp = 10.0f;
+  float bc_Iapp_sd = 50.0f;
+  
+  for (int i = 0; i < bc_range; i++)
+  {
+      bc_background_current.at(i) = bc_Iapp + bc_Iapp_sd * (float)drand48();
+  } 
+
+	if (i >= 5000 && i < 5025)
 	{
-		sim.runNetwork(0,500); // run network for 500 ms
-	}
-	
-	if ( i == 10)
-	{
-		for (int j = 0; j < numGranuleFire; j++)
+		for (int j = 0; j < numPyramidalFire; j++)
 		{
-			int randGranCell = DG_vec.front() + DG_vec_A[j]; // choose the jth random granule cell
-			DG_Granule_rate.setRate(DG_vec.at(randGranCell), DG_Granule_frate); // set the firing rate for the jth random granule cell
+			int pyrCellA = pyr_vec.front() + PC_vec_A[j]; // choose the jth Pyramidal cell for pattern A
+			pc_current.at(pyrCellA) = 1500; // increase the current to 1500 pA
 		}
-		sim.setSpikeRate(DG_Granule, &DG_Granule_rate, 1); // update the firing rates of all granule cells before the next run of the simulation           
-		sim.runNetwork(0,25); // run network for 25 ms
+		sim.setExternalCurrent(CA3_Pyramidal, pc_current); // update the current to each Pyramidal cell before the next run of the simulation           
+		sim.runNetwork(0,1); // run network for 1 ms
 	}
 	
-	if (i == 11)
+	if (i == 5025)
 	{
-		DG_Granule_rate.setRates(0.4f); // set the firing rates for all granule cells back to baseline firing rate
-		sim.setSpikeRate(DG_Granule, &DG_Granule_rate, 1); // update the firing rates of all granule cells before the next run of the simulation          
-        sim.runNetwork(0,75); // run network for 75 ms
+		for (int j = 0; j < numPyramidalFire; j++)
+		{
+			int pyrCellA = pyr_vec.front() + PC_vec_A[j]; // choose the jth Pyramidal cell for pattern A
+			pc_current.at(pyrCellA) = pc_background_current.at(pyrCellA); // return current to background noisy current value
+		}
+		sim.setExternalCurrent(CA3_Pyramidal, pc_current); // update the current to each Pyramidal cell before the next run of the simulation           
+		sim.runNetwork(0,1); // run network for 1 ms
 	}
 
-	if ( i == 12)
+	if (i >= 6000 && i < 6025)
 	{
-		for (int j = 0; j < numGranuleFire; j++)
+		for (int j = 0; j < numPyramidalFire; j++)
 		{
-			int randGranCell = DG_vec.front() + DG_vec_A[j]; // choose the jth random granule cell
-			DG_Granule_rate.setRate(DG_vec.at(randGranCell), DG_Granule_frate); // set the firing rate for the jth random granule cell
+			int pyrCellA = pyr_vec.front() + PC_vec_A[j]; // choose the jth Pyramidal cell for pattern A
+			pc_current.at(pyrCellA) = 1500; // increase the current to 1500 pA
 		}
-		sim.setSpikeRate(DG_Granule, &DG_Granule_rate, 1); // update the firing rates of all granule cells before the next run of the simulation           
-		sim.runNetwork(0,25); // run network for 25 ms
-        }
+		sim.setExternalCurrent(CA3_Pyramidal, pc_current); // update the current to each Pyramidal cell before the next run of the simulation           
+		sim.runNetwork(0,1); // run network for 1 ms
+	}
 		
-	if (i == 13)
+	if (i == 6025)
 	{
-		DG_Granule_rate.setRates(0.4f); // set the firing rates for all granule cells back to baseline firing rate
-		sim.setSpikeRate(DG_Granule, &DG_Granule_rate, 1); // update the firing rates of all granule cells before the next run of the simulation
-		sim.runNetwork(0,75); // run network for 75 ms
+		for (int j = 0; j < numPyramidalFire; j++)
+		{
+			int pyrCellA = pyr_vec.front() + PC_vec_A[j]; // choose the jth Pyramidal cell for pattern A
+			pc_current.at(pyrCellA) = pc_background_current.at(pyrCellA); // return current to background noisy current value
+		}
+		sim.setExternalCurrent(CA3_Pyramidal, pc_current); // update the current to each Pyramidal cell before the next run of the simulation           
+		sim.runNetwork(0,1); // run network for 1 ms
 	}
-        
-	if (i >=14 && i < 20)
-	{
-		sim.runNetwork(0,500); // run network for 500 ms
-	}
+
+		sim.runNetwork(0,1); // run network for 1 ms
+
 }
 ```
 
-8. The outcome of the simulation can now be saved by calling the saveSimulation function, which will save the network structure (more details can be found near the bottom of the page [here](https://github.com/UCI-CARL/CARLsim4/blob/feat/meansdSTPPost_hc/projects/ca3_snn_GPU_06_25_21_ca3_snn_pattern_completion/src/main_ca3_snn_GPU.cpp)):
+7. The outcome of the simulation can now be saved by calling the saveSimulation function, which will save the network structure (more details can be found near the bottom of the page [here](https://github.com/jkopsick/CARLsim6/tree/feat/CS6_hc_ca3/projects/ca3_snn_GPU_02_26_23_pattern_completion/src/main_ca3_snn_GPU.cpp)):
 
 ```
  sim.saveSimulation("ca3SNN2.dat", true); // define where to save the network structure to and save synapse info
 ```
 
-9. The saved network can now be loaded in additional simulation runs, by calling the loadSimulation function before the setupNetwork is called (invokes the SETUP simulation state; more details can be found near the middle of the page [here](https://github.com/UCI-CARL/CARLsim4/blob/feat/meansdSTPPost_hc/projects/ca3_snn_GPU_06_25_21_ca3_snn_pattern_completion/src/main_ca3_snn_GPU.cpp)):
+8. The saved network can now be loaded in additional simulation runs, by calling the loadSimulation function before the setupNetwork is called (invokes the SETUP simulation state; more details can be found near the middle of the page [here](https://github.com/jkopsick/CARLsim6/tree/feat/CS6_hc_ca3/projects/ca3_snn_GPU_02_26_23_pattern_completion/src/main_ca3_snn_GPU.cpp)):
 
 ```
 // before calling setupNetwork, call loadSimulation
@@ -921,7 +882,7 @@ fId = fopen("ca3SNN2.dat", "rb");
 sim.loadSimulation(fId);
 ```
 
-10. Now the setupNetwork function can be called and after its completion the connection to the network structure file can be closed (more details can be found near the middle of the page [here](https://github.com/UCI-CARL/CARLsim4/blob/feat/meansdSTPPost_hc/projects/ca3_snn_GPU_06_25_21_ca3_snn_pattern_completion/src/main_ca3_snn_GPU.cpp)):
+9. Now the setupNetwork function can be called and after its completion the connection to the network structure file can be closed (more details can be found near the middle of the page [here](https://github.com/jkopsick/CARLsim6/tree/feat/CS6_hc_ca3/projects/ca3_snn_GPU_02_26_23_pattern_completion/src/main_ca3_snn_GPU.cpp)):
 
 ```
 sim.setupNetwork();
@@ -930,29 +891,19 @@ sim.setupNetwork();
 fclose(fId);
 ```
 
-11. The same stimulation protocol from steps 5-10 can be called in additional runs to save and load the network structure to make the pattern stored more robustly. Once the user believes that the pattern has been robustly stored within the network structure, the stimulation protocol can be changed to test for pattern completion by selecting fewer neurons than the original set of granule cells. In the example below, only seven ({0,5,10,...,30}) of the original ten granule cells are selected for testing pattern completion:
+10. The same stimulation protocol from steps 5-9 can be called in additional runs to save and load the network structure to make the pattern stored more robustly. Once the user believes that the pattern has been robustly stored within the network structure, the stimulation protocol can be changed to test for pattern completion by selecting fewer neurons than the original set of Pyramidal cells. In the example below, only seven ({0,5,10,...,30}) of the original twenty Pyramidal cells are selected for testing pattern completion:
 
 ```
-// Declare variables that will store the start and end ID for the neurons
-// in the granule group
-int DG_start = sim.getGroupStartNeuronId(DG_Granule);
-int DG_end = sim.getGroupEndNeuronId(DG_Granule);
-int DG_range = (DG_end - DG_start) + 1;
+// Define the number of Pyramidal cells to fire
+int numPyramidalFire = 7;
 
-// Create a vector that is the length of the number of neurons in the granule population
-std::vector<int> DG_vec( boost::counting_iterator<int>( 0 ),
-                         boost::counting_iterator<int>( DG_range ));
-			 
-// Define the number of granule cells to fire
-int numGranuleFire = 7;
+std::vector<int> PC_vec_A;
 
-std::vector<int> DG_vec_A;
-
-// Define the location of those granule cells so that we choose the same granule cells each time we call setRates
-for (int i = 0; i < numGranuleFire; i++)
+// Define the location of those Pyramidal cells so that we choose the same Pyramidal cells each time we evoke a pattern
+for (int i = 0; i < numPyramidalFire; i++)
 {
-    DG_vec_A.push_back(5*(i+1));
+    PC_vec_A.push_back(5*(i+1));
 }
 ```
 
-12. Steps 6-10 can be followed again to see if the stored pattern was successfully recalled, which can be observed in MATLAB using the [CARLsim MATLAB Analysis Toolbox](http://uci-carl.github.io/CARLsim4/ch9_matlab_oat.html) and custom built functions and scripts used to interact with the Toolbox [here](https://github.com/Hippocampome-Org/snn_analysis/).
+11. Steps 5-10 can be followed again to see if the stored pattern was successfully recalled, which can be observed in MATLAB using the [CARLsim MATLAB Analysis Toolbox](https://uci-carl.github.io/CARLsim6/ch9_matlab_oat.html) and custom built functions and scripts used to interact with the Toolbox [here](https://github.com/Hippocampome-Org/snn_analysis/).

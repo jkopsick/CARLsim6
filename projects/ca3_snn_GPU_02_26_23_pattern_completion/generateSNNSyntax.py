@@ -35,7 +35,7 @@ def generateSNNSyntax(fileName):
     
     # Clean up the connectivity matrices to retrieve the newest probabilities of
     # connection
-    dfConnMat = dfConnMat.iloc[0:8,:-1];
+    dfConnMat = dfConnMat.iloc[0:3];
     
     # Rename each of the neuron types to a syntax appropriate for group declaration
     # by placing an underscore between spaces
@@ -53,7 +53,7 @@ def generateSNNSyntax(fileName):
     ut.cellTypeNameCARL(dfSTPTauU, dfName = "dfSTPTauU", newName = "TauUij");
     
     # Clean the internal population size dataframe
-    dfPopSize = dfPopSize.loc[0:7];
+    dfPopSize = dfPopSize.loc[0:2];
     
     # Create a data frame that will be used to generate syntax for the groups
     # in the simulation
@@ -129,12 +129,9 @@ def generateSNNSyntax(fileName):
         codeIM = codeIM + '\n';
     
     
-    sortedColumnsConnMat = list(dfConnMat.iloc[0:8,0]);
+    sortedColumnsConnMat = list(dfConnMat.iloc[0:3,0]);
     sortedColumnsConnMat.insert(0, 'Pre_Post');
-    sortedColumnsTMMat = ['CA3_QuadD_LM_mean', 'CA3_QuadD_LM_std', 'CA3_Axo_Axonic_mean',
-                          'CA3_Axo_Axonic_std', 'CA3_Basket_mean', 'CA3_Basket_std',
-                          'CA3_BC_CCK_mean', 'CA3_BC_CCK_std', 'CA3_Bistratified_mean',
-                          'CA3_Bistratified_std', 'CA3_Ivy_mean', 'CA3_Ivy_std',
+    sortedColumnsTMMat = ['CA3_Basket_mean', 'CA3_Basket_std',
                           'CA3_MFA_ORDEN_mean', 'CA3_MFA_ORDEN_std', 
                           'CA3_Pyramidal_mean', 'CA3_Pyramidal_std'
                           ];
@@ -319,4 +316,4 @@ def generateSNNSyntax(fileName):
         FOUT.write(codeSetSpikeMonitor)
 
 
-generateSNNSyntax("ca3net_02_16_21.xlsm")
+generateSNNSyntax("ca3net_02_16_21_archetype.xlsm")
