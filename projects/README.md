@@ -1,13 +1,11 @@
-# A Simulation Framework for Testing Data-Driven, Neuron-Type Specific CA3 SNNs 
-This repository includes information as to how to run an example and full-scale spiking neural network (SNN) model of hippocampal subregion CA3. Additionally, it describes a framework for building full-scale SNNs to test hypotheses regarding the hippocampal formation. The following instructions assume that the user has Ubuntu installed or is using a supercomputing cluster that is Linux-based. Furthermore, installation instructions of the CARLsim software can be found in the parent directory's [README](https://github.com/UCI-CARL/CARLsim4/tree/feat/meansdSTPPost_hc), but will also be provided here.
-
-This is a test.
+# A Simulation Framework for Testing Data-Driven, Neuron-Type Specific SNNs of the Hippocampal Formation 
+This repository includes information necessary to instantiate and simulate full-scale spiking neural network (SNN) models of the hippocampal formation, utilizing hippocampal subregion CA3 as an example. The following instructions assume that the user has Ubuntu installed or is using a supercomputing cluster that is Linux-based. Furthermore, installation instructions of the CARLsim software can be found in the parent directory's [README](https://github.com/jkopsick/CARLsim6/tree/feat/CS6_hc), but will also be provided here.
 
 ## Table of Contents:
 * [Language and Module Dependencies](#language-and-module-dependencies-for-the-software)
 	* [Programming Languages and Proficiency](#programming-languages-and-proficiency)
 	* [Ubuntu Users](#ubuntu)
-	* [GMU ARGO Users](#GMU-ARGO-cluster)
+	* [GMU Hopper Users](#GMU-Hopper-cluster)
 
 * [Creation of a network simulation](#creation-of-a-network-simulation)
 	* [Neuron Type Components](#neuron-type-components)
@@ -20,41 +18,29 @@ This is a test.
 
 * [Installation and Simulation of SNNs](#installation-and-simulation-of-the-SNNs)
 	* [Ubuntu Users](#ubuntu-users)
-	* [GMU ARGO Users](#users-with-access-to-GMU-ARGO-cluster)
-
-* [Framework to Test Hippocampal Hypotheses](#A-framework-to-test-hypotheses-of-the-hippocampal-formation) 
+	* [GMU Hopper Users](#users-with-access-to-GMU-Hopper-cluster)
 
 ## Language and Module Dependencies for the Software:
-Beyond the dependencies of CARLsim4 described at the link above, to generate the syntax necessary to run the example and full-scale SNNs one first must be familiar with C++ and Python, with recommended proficiency provided below. One will need to install Python 3 as well as the package dependencies included in the tables below. Additionally, one can install the following [Anaconda distribution](https://docs.anaconda.com/anaconda/install/), which includes Python 3 and pandas, but the xlrd function will still need to be downloaded, as it is an optional dependency of pandas.
+Beyond the dependencies of CARLsim6 described at the link above, the following dependencies are necessary to instantiate and simulate the example and full scale SNNs:
 
 ### Programming Languages and Proficiency
 |Language|Proficiency|
 |---|---|
 |C++|basic to intermediate|
-|Python|basic|
 
 ### Ubuntu 
 |module|tested version(s)|
 |---|---|
-|Anaconda|02.2020|
-|Python|3.7.4, 3.7.6, 3.8.5|
-|pandas|0.25.3, 1.2.3|
-|numpy|1.18.1, 1.20.1|
-|xlrd|1.2.0|
-|boost|1.67.0|
-|make|4.2.1|
-|gcc|7.3.3, 7.5.0|
+|gcc|9.3.0|
 |nohup|8.30|
+|CUDA|11.2.0|
 
-### GMU ARGO Cluster
+### GMU Hopper Cluster
 |module|tested version(s)|
 |---|---|
-|Anaconda|02.2020|
-|Python|3.7.4, 3.7.6, 3.8.5|
-|pandas|0.25.3, 1.2.3|
-|numpy|1.18.1, 1.20.1|
-|xlrd|1.2.0|
-|boost|1.67.0|
+|gcc|9.3.0|
+|openmpi|4.0.4|
+|CUDA|11.2.0|
 
 ## Creation of a network simulation
 The creation of a cell-type and connection-type specific network and the subsequent simulation of it in CARLsim4 relies on the following critical components, which will each be described in their own section:
