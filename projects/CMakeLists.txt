@@ -4,7 +4,7 @@
 if(CARLSIM_SAMPLES)
     add_subdirectory(hello_world)
     if(CARLSIM_JK_CA3_SNN)
-      add_subdirectory(ca3_example_net_02_26_21)
+      add_subdirectory(ca3_example_net_02_26_23)
       add_subdirectory(synchronous/ca3_snn_GPU_02_26_23_archetype)      
       add_subdirectory(synchronous/ca3_snn_GPU_02_26_23_baseline)
       add_subdirectory(synchronous/ca3_snn_GPU_02_26_23_class)    

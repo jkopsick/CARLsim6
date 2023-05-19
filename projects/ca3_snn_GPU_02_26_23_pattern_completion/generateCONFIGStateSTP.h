@@ -142,7 +142,7 @@ sim.setSTP(CA3_Pyramidal, CA3_Pyramidal, true, STPu(0.279220899f, 0.0f),
                                      STPtrNMDA(0.0f, 0.0f),
                                      STPtrGABAb(0.0f, 0.0f));
 
-sim.setESTDP(CA3_Pyramidal, CA3_Pyramidal_ true, STANDARD, ExpCurve(0.1f, 20.0f, -0.1f, 20.0f));
+sim.setESTDP(CA3_Pyramidal, CA3_Pyramidal, true, STANDARD, ExpCurve(0.1f, 20.0f, -0.1f, 20.0f));
 
 sim.setNeuronMonitor(CA3_Basket, "DEFAULT");
                                  
