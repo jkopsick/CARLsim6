@@ -846,32 +846,18 @@ __global__ 	void kernel_findFiring (int simTimeMs, int simTime) {
 			} else { // Regular neuron
 #ifdef JK_CA3_SNN
 				if (runtimeDataGPU.curSpike[lNId]) {
-					if (runtimeDataGPU.Izh_ref[lNId] > 0) {
-						// INT_MAX is used below to detect the initial value of lastSpikeTime that
-						// exists before any spike. This condition is needed before spk_tDiff can be computed.
 						if (runtimeDataGPU.lastSpikeTime[lNId] == INT_MAX) {
 							runtimeDataGPU.curSpike[lNId] = false;
 							needToWrite = true;
 							runtimeDataGPU.lastSpikeTime[lNId] = simTime;
 						}
-						else {
-							int spk_tDiff = simTime - runtimeDataGPU.lastSpikeTime[lNId];
-							if (spk_tDiff > runtimeDataGPU.Izh_ref[lNId]) {
-								runtimeDataGPU.curSpike[lNId] = false;
-								needToWrite = true;
-								runtimeDataGPU.lastSpikeTime[lNId] = simTime;
-							}
-							else {
-								runtimeDataGPU.curSpike[lNId] = false;
-								needToWrite = false;
-							}
-						}
-					}
-					else {
+                        
+                        else {
 				        runtimeDataGPU.curSpike[lNId] = false;
 				        needToWrite = true;
-			        }
+                        runtimeDataGPU.lastSpikeTime[lNId] = simTime;
 					// printf("Current Spike Flag %d at %d and %d \n",runtimeDataGPU.curSpike[lNId],simTimeMs,simTime);
+                        }
 				}
 #else
 				if (runtimeDataGPU.curSpike[lNId]) {
@@ -1390,7 +1376,7 @@ __device__ float getCompCurrent_GPU(int grpId, int neurId, float const0 = 0.0f, 
 * \param[in] nid The neuron id to be updated
 * \param[in] grpId The group id of the neuron
 */
-__device__ void updateNeuronState(int nid, int grpId, int simTimeMs, bool lastIteration) {
+__device__ void updateNeuronState(int nid, int grpId, int simTimeMs, int simTime, bool lastIteration) {
 	float v = runtimeDataGPU.voltage[nid];
 	float v_next = runtimeDataGPU.nextVoltage[nid];
 	float u = runtimeDataGPU.recovery[nid];
@@ -1407,6 +1393,8 @@ __device__ void updateNeuronState(int nid, int grpId, int simTimeMs, bool lastIt
 #ifdef JK_CA3_SNN
 	int Izh_ref = runtimeDataGPU.Izh_ref[nid];
 	int Izh_ref_c = runtimeDataGPU.Izh_ref_c[nid];
+    int lastSpikeTime = runtimeDataGPU.lastSpikeTime[nid];
+    int spk_tDiff = simTime - lastSpikeTime;
 #endif
 
 	// pre-load LIF parameters
@@ -1591,13 +1579,7 @@ __device__ void updateNeuronState(int nid, int grpId, int simTimeMs, bool lastIt
 #ifdef JK_CA3_SNN
 		// \todo JK refact
 		else if (!groupConfigsGPU[grpId].isLIF) {
-			if (Izh_ref_c > 0) {
-				if (lastIteration) {
-					runtimeDataGPU.Izh_ref_c[nid] -= 1;
-					v_next = runtimeDataGPU.Izh_c[nid];
-				}
-			}
-			else {
+
 					// 9-param Izhikevich
 					float k1 = dvdtIzhikevich9(v, u, inverse_C, k, vr, vt, totalCurrent,
 						timeStep);
@@ -1614,22 +1596,33 @@ __device__ void updateNeuronState(int nid, int grpId, int simTimeMs, bool lastIt
 					float k4 = dvdtIzhikevich9(v + k3, u + l3, inverse_C, k, vr, vt,
 						totalCurrent, timeStep);
 					float l4 = dudtIzhikevich9(v + k3, u + l3, vr, a, b, timeStep);
+                    
+//                    printf("Last Spike at time %d \n", lastSpikeTime);
+                    if ((lastSpikeTime != INT_MAX) && (spk_tDiff < Izh_ref) && (v >= vt) && (v < vpeak)) {
+                        // printf("Hit threshold at time %d \n", simTime);
+                        v = v;
+                        u = u;
+                    }
+                    
+                    else {
 
 					v_next = v + (1.0f / 6.0f) * (k1 + 2.0f * k2 + 2.0f * k3 + k4);
-
+                    
                     if (v_next > vpeak) {
                         v_next = vpeak; // break the loop but evaluate u[i]
                         runtimeDataGPU.curSpike[nid] = true;
                         v_next = runtimeDataGPU.Izh_c[nid];
                         u += runtimeDataGPU.Izh_d[nid];
-                        if (lastIteration) {
-                            runtimeDataGPU.Izh_ref_c[nid] = Izh_ref;
-                        }
+//                        if (lastIteration) {
+//                            runtimeDataGPU.Izh_ref_c[nid] = Izh_ref;
+//                        }
                     }
 					if (v_next < -90.0f) v_next = -90.0f;
 
 					u += (1.0f / 6.0f) * (l1 + 2.0f * l2 + 2.0f * l3 + l4);
-			}
+                    
+                    }
+
 		}
 #else
 		else if(!groupConfigsGPU[grpId].isLIF){
@@ -1738,7 +1731,7 @@ __device__ void updateNeuronState(int nid, int grpId, int simTimeMs, bool lastIt
  *             current, extCurrent, Izh_a, Izh_b
  * glb access:
  */
-__global__ void kernel_neuronStateUpdate(int simTimeMs, bool lastIteration) {
+__global__ void kernel_neuronStateUpdate(int simTimeMs, bool lastIteration, int simTime) {
 	const int totBuffers = loadBufferCount;
 
 	// update neuron state
@@ -1756,7 +1749,7 @@ __global__ void kernel_neuronStateUpdate(int simTimeMs, bool lastIteration) {
 			if (IS_REGULAR_NEURON(nid, networkConfigGPU.numNReg, networkConfigGPU.numNPois)) {
 				// P7
 				// update neuron state here....
-				updateNeuronState(nid, grpId, simTimeMs, lastIteration);
+				updateNeuronState(nid, grpId, simTimeMs, simTime, lastIteration);
 
 				// P8
 				if (groupConfigsGPU[grpId].WithHomeostasis)
@@ -4376,7 +4369,7 @@ void SNN::globalStateUpdate_N_GPU(int netId) {
 		if (j == networkConfigs[netId].simNumStepsPerMs)
 			lastIteration = true;
 		// update all neuron state (i.e., voltage and recovery), including homeostasis
-		kernel_neuronStateUpdate << <NUM_BLOCKS, NUM_THREADS >> > (simTimeMs, lastIteration);
+		kernel_neuronStateUpdate << <NUM_BLOCKS, NUM_THREADS >> > (simTimeMs, lastIteration, simTime);
 		CUDA_GET_LAST_ERROR("Kernel execution failed");
 
 		// the above kernel should end with a syncthread statement to be on the safe side
